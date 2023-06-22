@@ -12,7 +12,7 @@ const danhmucRoutes = require('./danhmuc.route');
 const bannerRoutes = require('./banner.route');
 const colorRoutes = require('./color.route');
 const productRoutes = require('./product.route');
-
+const orderRoutes = require('./order.route');
 const router = express.Router();
 
 /**
@@ -37,5 +37,6 @@ router.use('/provinces', provinceRoutes);
 router.use('/amenities', amenityRoutes);
 router.use('/amenityTypes', amenityTypeRoutes);
 router.use('/settings', settingRoutes);
+router.use('/order', orderRoutes);
 
 module.exports = router;

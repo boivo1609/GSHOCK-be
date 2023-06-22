@@ -26,6 +26,10 @@ const RULE = {
   WEEKEND: 2,
   CUSTOM_DATE: 3,
 };
+const orderStatus = {
+  cash: 'Tiền mặt',
+  zalopay: 'Zalopay',
+};
 const ROLES = Object.values(ROLE);
 const RULES = Object.values(RULE);
 const STATUSES = Object.values(STATUS);
@@ -37,4 +41,5 @@ module.exports = {
   RULE,
   STATUSES,
   STATUS,
+  orderStatus,
 };
