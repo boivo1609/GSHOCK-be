@@ -1,6 +1,19 @@
 {
   "version": 2,
-  "name": "gshock",
-  "builds": [{ "src": "/v1/index.js", "use": "@vercel/node" }],
-  "routes": [{ "src": "/(.*)", "dest": "/v1/index.js" }]
+  "builds": [
+    {
+      "src": "src/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/v1/(.*)",
+      "dest": "src/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
 }
