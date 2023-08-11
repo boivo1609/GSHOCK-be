@@ -35,6 +35,7 @@ const productSchema = new mongoose.Schema(
     price_discount: Number,
     discount: Number,
     so_luong: Number,
+    soluong_conlai: Number,
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: MODEL.DANH_MUC,

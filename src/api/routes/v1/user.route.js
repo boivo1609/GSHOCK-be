@@ -87,7 +87,8 @@ router
    *
    * @apiError (Unauthorized 401)  Unauthorized  Only authenticated Users can access the data
    */
-  .get(authorize(), controller.loggedIn).put(authorize(),controller.updateLoggedIn);
+  .get(authorize(), controller.loggedIn)
+  .put(authorize(), controller.updateLoggedIn);
 
 router
   .route('/:userId')
@@ -185,5 +186,5 @@ router
    * @apiError (Not Found 404)    NotFound      User does not exist
    */
   .delete(authorize(LOGGED_USER), controller.remove);
-
+router.route('/search').get(authorize(ADMIN), controller.listPaginate);
 module.exports = router;

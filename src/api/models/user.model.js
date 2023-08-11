@@ -7,7 +7,13 @@ const jwt = require('jwt-simple');
 const uuidv4 = require('uuid/v4');
 const APIError = require('../errors/api-error');
 const { env, jwtSecret, jwtExpirationInterval } = require('../../config/vars');
-const { MODEL, ROLES, ROLE } = require('../../constants/commons');
+const {
+  MODEL,
+  ROLES,
+  ROLE,
+  STATUSES,
+  STATUS,
+} = require('../../constants/commons');
 
 const identificationSchema = new mongoose.Schema({
   fullName: {
@@ -47,11 +53,23 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
       maxlength: 128,
     },
+    firstName: {
+      type: String,
+      // required: true,
+    },
+    lastName: {
+      type: String,
+      // required: true,
+    },
     name: {
       type: String,
       maxlength: 128,
       index: true,
       trim: true,
+    },
+    address: {
+      type: String,
+      // required: true,
     },
     gender: {
       type: String,
@@ -66,11 +84,9 @@ const userSchema = new mongoose.Schema(
       enum: ROLES,
       default: ROLE.USER,
     },
-    avatar: {
-      type: String,
-      trim: true,
-    },
-    phoneNumber: {
+    image: String,
+    imagePublicId: String,
+    phone: {
       type: String,
       trim: true,
     },
@@ -80,6 +96,11 @@ const userSchema = new mongoose.Schema(
     identification: identificationSchema,
     bankName: {
       type: String,
+    },
+    status: {
+      type: String,
+      enum: STATUSES,
+      default: STATUS.ACTIVE,
     },
     bankId: {
       type: String,
@@ -121,11 +142,16 @@ userSchema.method({
     const fields = [
       'id',
       'name',
+      'firstName',
+      'lastName',
+      'address',
       'email',
       'avatar',
-      'phoneNumber',
+      'phone',
       'gender',
       'birthday',
+      'image',
+      'imagePublicId',
       'identification',
       'createdAt',
       'role',
@@ -141,7 +167,7 @@ userSchema.method({
 
   token() {
     const payload = {
-      exp: moment().add(jwtExpirationInterval, 'minutes').unix(),
+      exp: moment().add(600000, 'minutes').unix(),
       iat: moment().unix(),
       sub: this._id,
     };

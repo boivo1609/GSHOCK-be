@@ -1,0 +1,11 @@
+const express = require('express');
+const multer = require('multer');
+const controller = require('../../controllers/user1.controller');
+const storage = multer.memoryStorage();
+const multerUpload = multer({ storage });
+const { authorize, ADMIN } = require('../../middlewares/auth');
+const router = express.Router();
+router.route('/:id').put(multerUpload.single('image'), controller.updateUser);
+router.route('/search').get(authorize(ADMIN), controller.listPaginate);
+router.route('/find-user-by-id').get(controller.getUserById);
+module.exports = router;

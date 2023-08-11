@@ -14,7 +14,7 @@ const emailProvider = require('../services/emails/emailProvider');
 function generateTokenResponse(user, accessToken) {
   const tokenType = 'Bearer';
   const refreshToken = RefreshToken.generate(user).token;
-  const expiresIn = moment().add(30, 'day');
+  const expiresIn = moment().add(30, 'month');
   return {
     tokenType,
     accessToken,
@@ -52,10 +52,10 @@ exports.login = async (req, res, next) => {
   try {
     const { user, accessToken } = await User.findAndGenerateToken(req.body);
     const token = generateTokenResponse(user, accessToken);
-    const userTransformed = user.transform();
+    // const userTransformed = user.transform();
     return res.json({
       token,
-      user: userTransformed,
+      user: user,
       message: 'Đăng nhập thành công',
     });
   } catch (error) {

@@ -64,9 +64,9 @@ exports.create = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const danhmuc = await DanhMuc.find();
-    const checkDanhmuc = danhmuc.filter((item) => item.products.length > 0);
-    if (checkDanhmuc.length) {
+    const danhmuc = await DanhMuc.findById(id);
+
+    if (danhmuc.products.length > 0) {
       return res
         .status(500)
         .json({ message: 'Danh mục chứa sản phẩm, không thể xóa' });

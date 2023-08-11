@@ -16,7 +16,34 @@ exports.load = async (req, res, next, id) => {
     return next(error);
   }
 };
+exports.listPaginate = async (req, res, next) => {
+  try {
+    console.log(req);
+    const perPage = parseInt(req.query.per_page, 10) || 10; // Number of items per page
+    const currentPage = parseInt(req.query.current_page, 10) || 1; // Current page number
+    const searchTerm = req.query.name || ''; // Search term
 
+    const filter = {
+      name: { $regex: searchTerm, $options: 'i' },
+    };
+
+    const totalCount = await User.countDocuments(filter); // Total count of matching documents
+    const totalPages = Math.ceil(totalCount / perPage); // Total number of pages
+
+    const skipCount = perPage * (currentPage - 1); // Number of documents to skip
+
+    const user = await User.find(filter).skip(skipCount).limit(perPage).exec();
+
+    res.send({
+      content: user,
+      size: perPage,
+      totalElements: totalCount,
+      totalPages,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 /**
  * Get user
  * @public
@@ -34,11 +61,11 @@ exports.updateLoggedIn = (req, res) => {
   const updatedUser = omit(req.body, ommitRole);
   const user = Object.assign(req.user, updatedUser);
 
-  user.save()
+  user
+    .save()
     .then((savedUser) => res.json(savedUser.transform()))
     .catch((e) => next(User.checkDuplicateEmail(e)));
 };
-
 
 /**
  * Create new user
@@ -84,7 +111,8 @@ exports.update = (req, res, next) => {
   const updatedUser = omit(req.body, ommitRole);
   const user = Object.assign(req.locals.user, updatedUser);
 
-  user.save()
+  user
+    .save()
     .then((savedUser) => res.json(savedUser.transform()))
     .catch((e) => next(User.checkDuplicateEmail(e)));
 };
@@ -110,7 +138,8 @@ exports.list = async (req, res, next) => {
 exports.remove = (req, res, next) => {
   const { user } = req.locals;
 
-  user.remove()
+  user
+    .remove()
     .then(() => res.status(httpStatus.NO_CONTENT).end())
     .catch((e) => next(e));
 };

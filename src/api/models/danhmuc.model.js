@@ -16,7 +16,7 @@ const danhmucSchema = new mongoose.Schema(
     products: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: MODEL.AMENITY,
+        ref: MODEL.PRODUCT,
       },
     ],
     status: {
